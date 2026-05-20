@@ -1,0 +1,25 @@
+{# commerce-paystack/src/templates/gatewaySettings.twig #}
+{% import "_includes/forms" as forms %}
+
+{{ forms.textField({
+    label: "Secret Key"|t('commerce-paystack'),
+    id: 'secretKey',
+    name: 'secretKey',
+    value: gateway.secretKey,
+    required: true,
+}) }}
+
+{{ forms.textField({
+    label: "Public Key"|t('commerce-paystack'),
+    id: 'publicKey',
+    name: 'publicKey',
+    value: gateway.publicKey,
+    required: true,
+}) }}
+
+{{ forms.lightswitchField({
+    label: "Test Mode"|t('commerce-paystack'),
+    id: 'testMode',
+    name: 'testMode',
+    on: gateway.testMode,
+}) }}
