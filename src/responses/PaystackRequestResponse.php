@@ -19,24 +19,22 @@ class PaystackRequestResponse implements RequestResponseInterface
         $this->redirectUrl = $url;
     }
 
-    public function setProcessing(bool $processing): void
-    {
-        $this->processing = $processing;
-    }
 
     public function isSuccessful(): bool
     {
-        if (isset($this->data['data']['status'])) {
-            return $this->data['data']['status'] === 'success';
-        }
-
-        return (bool)($this->data['status'] ?? false);
+        // Paystack returns top-level status=true for BOTH initialize and verify.
+        // We must check data.status === 'success' to know if MONEY was actually received.
+        $status = $this->data['data']['status'] ?? null;
+        return ($this->data['status'] ?? false) === true && $status === 'success';
     }
 
     public function isProcessing(): bool
     {
-        return $this->processing;
+        // During purchase() initialization, there's no data.status yet, or it's pending
+        $status = $this->data['data']['status'] ?? null;
+        return ($this->data['status'] ?? false) === true && $status !== 'success';
     }
+
 
     public function isRedirect(): bool
     {
